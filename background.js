@@ -24,10 +24,11 @@ var   serverURL = 'https://epadev.micloud.tw',
       queryTreeID = serverURL + '/gettreeid',
       // Parameter
       userStatus,
+      domain,
       treeVersion = '',
       treeData,
       errorMsg,
-      Help = '請聯絡負責人員，並告知以下訊息。',
+      Help = 'Please contact the responsible officer and inform the following message.',
       // Function
       queryFunction,
       queryTreeVersion,
@@ -38,7 +39,7 @@ var   serverURL = 'https://epadev.micloud.tw',
  * Error Handle
  */
 errorFn = function errorFn(e){
-   errorMsg = Help + '目前無法與伺服器連線，原因如下：<hr>' + e ;
+   errorMsg = Help + 'Currently not connect to the server for the following reasons:<hr>' + e ;
 };
 /**
  * Query information from coress domain
@@ -262,6 +263,11 @@ function getInboxCount(onSuccess, onError) {
         console.log('connect success');
         // Setting to popup page for not display login button.
         userStatus = true;
+        // Query user email for send to tree server and determine whether the correct mail.
+        if (xmlDoc.querySelector('title')){
+           var titleContent = xmlDoc.querySelector('title').textContent;
+           domain = titleContent.split('@')[1];
+        };
         if (fullCountNode) {
           handleSuccess(fullCountNode.textContent);
           return;
