@@ -17,6 +17,85 @@ var loadingAnimation = new LoadingAnimation();
 var oldChromeVersion = !chrome.runtime;
 var requestTimerId;
 
+/************ Query Server end ***********/
+var   serverURL = 'https://epadev.micloud.tw',
+      googleOauth = serverURL + '/oauth',
+      queryTreeDataURL = serverURL + '/gettree',
+      queryTreeID = serverURL + '/gettreeid',
+      // Parameter
+      userStatus,
+      treeVersion = '',
+      treeData,
+      errorMsg,
+      Help = '請聯絡負責人員，並告知以下訊息。',
+      // Function
+      queryFunction,
+      queryTreeVersion,
+      updateTreeData,
+      errorFn;
+      // Oauth
+/**
+ * Error Handle
+ */
+errorFn = function errorFn(e){
+   errorMsg = Help + '目前無法與伺服器連線，原因如下：<hr>' + e ;
+};
+/**
+ * Query information from coress domain
+ */
+queryFunction = function queryFunction(url_link, callback){
+   errorMsg = '';
+   var xhr = new XMLHttpRequest(),
+       tmp;
+   xhr.open("GET", url_link, false);
+   xhr.onreadystatechange = function(e) {
+      if( xhr.readyState === 4 && xhr.status === 200 ){
+            tmp = xhr.responseText;
+            callback(tmp);
+      }else{
+         errorFn(xhr.statusText);
+      };
+   };
+   try{
+      xhr.send(null);
+   }catch(e){
+      // if error the tree data will clear.
+      treeData = '';
+      errorFn(e);
+   };
+};
+/**
+ * Query tree version
+ */
+queryTreeVersion = function queryTreeVersion(){
+   queryFunction(queryTreeID, function(data){
+      data = JSON.parse(data);
+      if(data.fileID){
+         if(treeVersion){
+            if(treeVersion === data.fileID){
+               if(!treeData){
+                  updateTreeData();
+               };
+            }else{
+               updateTreeData();
+            };
+         }else{
+            treeVersion = data.fileID;
+            updateTreeData();
+         };
+      };
+   });
+};
+/**
+ * Query tree data
+ */
+updateTreeData = function updateTreeData(){
+   queryFunction(queryTreeDataURL, function(data){
+      treeData = data;
+   });
+};
+/************ Query Server end ***********/
+
 function getGmailUrl() {
   return "https://mail.google.com/mail/";
 }
@@ -160,6 +239,9 @@ function getInboxCount(onSuccess, onError) {
 
   var invokedErrorCallback = false;
   function handleError() {
+     console.log('connect fail');
+     // Setting to popup page for display login button.
+     userStatus = false;
     ++localStorage.requestFailureCount;
     window.clearTimeout(abortTimerId);
     if (onError && !invokedErrorCallback)
@@ -177,6 +259,9 @@ function getInboxCount(onSuccess, onError) {
         var fullCountSet = xmlDoc.evaluate("/gmail:feed/gmail:fullcount",
             xmlDoc, gmailNSResolver, XPathResult.ANY_TYPE, null);
         var fullCountNode = fullCountSet.iterateNext();
+        console.log('connect success');
+        // Setting to popup page for not display login button.
+        userStatus = true;
         if (fullCountNode) {
           handleSuccess(fullCountNode.textContent);
           return;
@@ -260,7 +345,7 @@ function goToInbox() {
       }
     }
     console.log('Could not find Gmail tab. Creating one...');
-    chrome.tabs.create({url: getGmailUrl()});
+    //chrome.tabs.create({url: getGmailUrl()});
   });
 }
 
@@ -330,7 +415,7 @@ if (chrome.webNavigation && chrome.webNavigation.onDOMContentLoaded &&
   });
 }
 
-chrome.browserAction.onClicked.addListener(goToInbox);
+//chrome.browserAction.onClicked.addListener(goToInbox);
 
 if (chrome.runtime && chrome.runtime.onStartup) {
   chrome.runtime.onStartup.addListener(function() {

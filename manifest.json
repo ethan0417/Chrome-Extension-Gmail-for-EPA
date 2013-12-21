@@ -4,7 +4,8 @@
     "page": "background.html"
   },
   "browser_action": {
-    "default_icon": "gmail_not_logged_in.png"
+    "default_icon": "gmail_not_logged_in.png",
+    "default_popup": "popup.html"
   },
   "default_locale": "en",
   "description": "__MSG_gmailcheck_description__",
@@ -16,8 +17,19 @@
     "alarms",
     "tabs",
     "webNavigation",
-    "*://*.google.com/"
+    "*://*.google.com/",
+    "https://epadev.micloud.tw/*"
    ],
+  "content_scripts": [
+      {
+         "matches": [
+            "<all_urls>"
+         ],
+         "js": [
+            "javascripts/contentScript.js"
+         ]
+      }
+  ],
   "version": "4.4.0",
   "manifest_version": 2
 }

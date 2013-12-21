@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <link href="stylesheet/skin/ui.dynatree.css" rel="stylesheet">
+      <link href="stylesheet/popup.css" rel="stylesheet">
+      <link href="stylesheet/buttons/css/font-awesome.min.css" rel="stylesheet">
+      <link href="stylesheet/buttons/css/buttons.css" rel="stylesheet">
+      <script src="javascripts/jquery/jquery.js"></script>
+      <script src="javascripts/jquery/jquery-ui.custom.js"></script>
+      <script src="javascripts/jquery/jquery.cookie.js"></script>
+      <script src="javascripts/jquery/jquery.dynatree.js"></script>
+      <script src='javascripts/popup.js'></script>
+   </head>
+   <body>
+      <div id='head'>
+         <img src='images/logo.jpg'>
+         <div>
+            <div class='tree hide' id='describeInfo'>
+               <a href='#error'><span id='offlineMsg' class='error hide'>(目前無法連線)</span></a>
+               <br>
+               <span>人名依姓氏筆劃排序</span>
+            </div>
+            <div class='button-position tree hide'>
+               <a href="#selectAll" class="button glow button-rounded button-primary button-tiny"><i class="icon-check"></i> 全選 </a>
+               <a href="#cancelAll" class="button glow button-rounded button-primary button-tiny"><i class="icon-check-empty"></i> 取消全選 </a>
+            </div>
+         </div>
+         <div id='logout' class='tree hide'>
+            <a href="#logout" class="button glow button-rounded button-primary button-tiny"> 登出 </a>
+         </div>
+      </div>
+      <div id='main-content'>
+         <div id='errorMsg' class='hide'></div>
+         <div id='google-login' class='hide'>
+            <a href='#' target='_blank'><img src='images/google_login.jpg' width='200px'></a>
+         </div>
+         <div id='tree' class='tree hide'></div>
+      </div>
+      <div id='footer'></div>
+   </body>
+</html>
