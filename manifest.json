@@ -4,20 +4,24 @@
     "page": "background.html"
   },
   "browser_action": {
-    "default_icon": "gmail_not_logged_in.png",
+    "default_title": "環保署組織樹",
+    "default_icon": "images/icon16.png",
     "default_popup": "popup.html"
   },
   "default_locale": "en",
-  "description": "__MSG_gmailcheck_description__",
+  "description": "提供環保署輸入電子郵件，可快速勾選並自動填入。",
   "icons": {
-    "128": "icon_128.png"
+    "16": "images/icon16.png",
+    "48": "images/icon48.png",
+    "128": "images/icon128.png"
   },
-  "name": "__MSG_gmailcheck_name__",
+  "name": "EPA",
   "permissions": [
     "alarms",
     "tabs",
     "webNavigation",
     "*://*.google.com/",
+    "https://orgtree.epa.gov.tw/*",
     "https://epadev.micloud.tw/*"
    ],
   "content_scripts": [
@@ -30,6 +34,6 @@
          ]
       }
   ],
-  "version": "4.4.0",
+  "version": "3.2.0",
   "manifest_version": 2
 }
