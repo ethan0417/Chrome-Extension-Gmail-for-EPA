@@ -346,7 +346,7 @@ function goToInbox() {
         console.log('Found Gmail tab: ' + tab.url + '. ' +
                     'Focusing and refreshing count...');
         chrome.tabs.update(tab.id, {selected: true});
-        startRequest({scheduleRequest:false, showLoadingAnimation:false});
+        startRequest({scheduleRequest:true, showLoadingAnimation:false});
         return;
       }
     }
