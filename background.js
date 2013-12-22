@@ -440,3 +440,7 @@ if (chrome.runtime && chrome.runtime.onStartup) {
     updateIcon();
   });
 }
+
+chrome.windows.onRemoved.addListener(function(windowId){
+   console.log('windows closed');
+})
