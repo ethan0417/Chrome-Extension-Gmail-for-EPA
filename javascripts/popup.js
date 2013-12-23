@@ -64,14 +64,14 @@ $(document).ready(function(){
    var init = function init(){
       chrome.extension.getBackgroundPage().goToInbox();
       var login = chrome.extension.getBackgroundPage().userStatus || '';
+      var connectError = chrome.extension.getBackgroundPage().errorMsg;
+      if(connectError){
+         $('#errorMsg').html(connectError).removeClass('hide');
+         $('#offlineMsg').removeClass('hide');
+      };
 
       if( login ){
-         var connectError = chrome.extension.getBackgroundPage().errorMsg;
          var treeData = chrome.extension.getBackgroundPage().treeData || '';
-         if(connectError){
-            $('#errorMsg').html(connectError).removeClass('hide');
-            $('#offlineMsg').removeClass('hide');
-         };
          $('.tree').removeClass('hide');
          if(treeData){
             currentData = JSON.parse(treeData);

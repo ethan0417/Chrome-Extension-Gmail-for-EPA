@@ -41,7 +41,7 @@ var   serverURL = 'https://epadev.micloud.tw',
  * Error Handle
  */
 errorFn = function errorFn(e){
-   errorMsg = Help + 'Currently not connect to the server for the following reasons:<hr>' + e ;
+   errorMsg = Help + '<hr>' + e ;
 };
 /**
  * Query information from coress domain
@@ -76,6 +76,7 @@ queryTreeVersion = function queryTreeVersion(){
       if(data.hasOwnProperty('account') && data.account === false){
          console.log('data account error');
          userStatus = false;
+         errorFn('Wrong account, please check your browser login account!');
       };
       if(data.fileID){
       console.log('account success');
