@@ -22,8 +22,10 @@ var   serverURL = 'https://epadev.micloud.tw',
       googleOauth = serverURL + '/oauth',
       queryTreeDataURL = serverURL + '/gettree',
       queryTreeID = serverURL + '/gettreeid',
+      logoutURL = serverURL + '/logout',
       // Parameter
       userStatus,
+      getTreeStatus,
       domain,
       treeVersion = '',
       treeData,
@@ -71,7 +73,12 @@ queryFunction = function queryFunction(url_link, callback){
 queryTreeVersion = function queryTreeVersion(){
    queryFunction(queryTreeID, function(data){
       data = JSON.parse(data);
+      if(data.hasOwnProperty('account') && data.account === false){
+         console.log('data account error');
+         userStatus = false;
+      };
       if(data.fileID){
+      console.log('account success');
          if(treeVersion){
             if(treeVersion === data.fileID){
                if(!treeData){
@@ -138,7 +145,7 @@ LoadingAnimation.prototype.paintFrame = function() {
   if (this.current_ >= this.maxDot_)
     text += "";
 
-  chrome.browserAction.setBadgeText({text:text});
+  //chrome.browserAction.setBadgeText({text:text});
   this.current_++;
   if (this.current_ == this.maxCount_)
     this.current_ = 0;
@@ -165,14 +172,16 @@ LoadingAnimation.prototype.stop = function() {
 function updateIcon() {
   if (!localStorage.hasOwnProperty('unreadCount')) {
     chrome.browserAction.setIcon({path:"images/icon16.png"});
-    chrome.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
-    chrome.browserAction.setBadgeText({text:"?"});
+    //chrome.browserAction.setBadgeBackgroundColor({color:[190, 190, 190, 230]});
+    //chrome.browserAction.setBadgeText({text:"?"});
   } else {
     chrome.browserAction.setIcon({path: "images/icon16.png"});
-    chrome.browserAction.setBadgeBackgroundColor({color:[208, 0, 24, 255]});
+    //chrome.browserAction.setBadgeBackgroundColor({color:[208, 0, 24, 255]});
+    /*
     chrome.browserAction.setBadgeText({
       text: localStorage.unreadCount != "0" ? localStorage.unreadCount : ""
     });
+    */
   }
 }
 
@@ -243,6 +252,10 @@ function getInboxCount(onSuccess, onError) {
      console.log('connect fail');
      // Setting to popup page for display login button.
      userStatus = false;
+     queryFunction( logoutURL, function(data){
+        console.log('server logout');
+        console.log(data);
+     });
     ++localStorage.requestFailureCount;
     window.clearTimeout(abortTimerId);
     if (onError && !invokedErrorCallback)
@@ -264,10 +277,13 @@ function getInboxCount(onSuccess, onError) {
         // Setting to popup page for not display login button.
         userStatus = true;
         // Query user email for send to tree server and determine whether the correct mail.
+        /*
         if (xmlDoc.querySelector('title')){
            var titleContent = xmlDoc.querySelector('title').textContent;
            domain = titleContent.split('@')[1];
         };
+        */
+        queryTreeVersion();
         if (fullCountNode) {
           handleSuccess(fullCountNode.textContent);
           return;
@@ -312,7 +328,7 @@ function ease(x) {
 
 function animateFlip() {
   rotation += 1/animationFrames;
-  drawIconAtRotation();
+  //drawIconAtRotation();
 
   if (rotation <= 1) {
     setTimeout(animateFlip, animationSpeed);

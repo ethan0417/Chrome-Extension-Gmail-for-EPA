@@ -1,7 +1,7 @@
 $(document).ready(function(){
    var currentData;
    var mailList = '',
-       googleLoginURL = chrome.extension.getBackgroundPage().getGmailUrl(),
+       googleLoginURL = chrome.extension.getBackgroundPage().googleOauth,
        //logoutURL = chrome.extension.getBackgroundPage().logoutURL,
        tree,
        treeSelect;
@@ -64,9 +64,8 @@ $(document).ready(function(){
    var init = function init(){
       chrome.extension.getBackgroundPage().goToInbox();
       var login = chrome.extension.getBackgroundPage().userStatus || '';
-      
+
       if( login ){
-         chrome.extension.getBackgroundPage().queryTreeVersion();
          var connectError = chrome.extension.getBackgroundPage().errorMsg;
          var treeData = chrome.extension.getBackgroundPage().treeData || '';
          if(connectError){
