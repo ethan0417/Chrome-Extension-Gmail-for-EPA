@@ -361,8 +361,8 @@ function goToInbox() {
       if (tab.url && isGmailUrl(tab.url)) {
         console.log('Found Gmail tab: ' + tab.url + '. ' +
                     'Focusing and refreshing count...');
-        chrome.tabs.update(tab.id, {selected: true});
-        startRequest({scheduleRequest:true, showLoadingAnimation:false});
+        //chrome.tabs.update(tab.id, {selected: true});
+        startRequest({scheduleRequest:false, showLoadingAnimation:false});
         return;
       }
     }
@@ -374,7 +374,7 @@ function goToInbox() {
 function onInit() {
   console.log('onInit');
   localStorage.requestFailureCount = 0;  // used for exponential backoff
-  startRequest({scheduleRequest:true, showLoadingAnimation:true});
+  startRequest({scheduleRequest:false, showLoadingAnimation:true});
   if (!oldChromeVersion) {
     // TODO(mpcomplete): We should be able to remove this now, but leaving it
     // for a little while just to be sure the refresh alarm is working nicely.
@@ -389,7 +389,7 @@ function onAlarm(alarm) {
   if (alarm && alarm.name == 'watchdog') {
     onWatchdog();
   } else {
-    startRequest({scheduleRequest:true, showLoadingAnimation:false});
+    startRequest({scheduleRequest:false, showLoadingAnimation:false});
   }
 }
 
@@ -400,7 +400,7 @@ function onWatchdog() {
     } else {
       console.log('Refresh alarm doesn\'t exist!? ' +
                   'Refreshing now and rescheduling.');
-      startRequest({scheduleRequest:true, showLoadingAnimation:false});
+      startRequest({scheduleRequest:false, showLoadingAnimation:false});
     }
   });
 }
@@ -410,7 +410,7 @@ if (oldChromeVersion) {
   onInit();
 } else {
   chrome.runtime.onInstalled.addListener(onInit);
-  chrome.alarms.onAlarm.addListener(onAlarm);
+  //chrome.alarms.onAlarm.addListener(onAlarm);
 }
 
 var filters = {
