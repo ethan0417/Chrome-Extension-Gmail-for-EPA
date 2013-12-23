@@ -21,7 +21,6 @@
     "tabs",
     "webNavigation",
     "*://*.google.com/",
-    "https://orgtree.epa.gov.tw/*",
     "https://epadev.micloud.tw/*"
    ],
   "content_scripts": [
